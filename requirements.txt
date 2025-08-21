@@ -1,7 +1,10 @@
-pydantic
+
 langchain-core
 langgraph
 python-dotenv
 langchain-experimental
 langchain-google-genai
 langchain-tavily
+langchain-community
+pydantic
+attrs==25.3.0

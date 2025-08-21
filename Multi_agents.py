@@ -15,6 +15,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
 web_search = TavilySearch(max_results=3)
 python_repl_tool = PythonREPLTool()
 
+
 class Supervisor(BaseModel):
     next: Literal["enhancer", "researcher", "coder"] = Field(
         description="Determines which specialist to activate next in the workflow sequence: "
@@ -26,7 +27,10 @@ class Supervisor(BaseModel):
         description="Detailed justification for the routing decision, explaining the rationale behind selecting the particular specialist and how this advances the task toward completion."
     )
 
-def supervisor_node(state: MessagesState) -> Command[Literal["enhancer", "researcher", "coder"]]:
+
+def supervisor_node(
+    state: MessagesState,
+) -> Command[Literal["enhancer", "researcher", "coder"]]:
     system_prompt = """
         You are a workflow supervisor managing a team of three specialized agents: Prompt Enhancer, Researcher, and Coder. Your role is to orchestrate the workflow by selecting the most appropriate next agent based on the current state and needs of the task. Provide a clear, concise rationale for each decision to ensure transparency in your decision-making process.
         **Team Members**:
@@ -46,11 +50,12 @@ def supervisor_node(state: MessagesState) -> Command[Literal["enhancer", "resear
     response = llm.with_structured_output(Supervisor).invoke(messages)
     goto = response.next
     reason = response.reason
-    print(f"--- Workflow Transition: Supervisor → {goto.upper()} ---")
+    print(f"--- Workflow Transition: Supervisor  {goto.upper()} ---")
     return Command(
         update={"messages": [HumanMessage(content=reason, name="supervisor")]},
         goto=goto,
     )
+
 
 def enhancer_node(state: MessagesState) -> Command[Literal["supervisor"]]:
     system_prompt = (
@@ -66,11 +71,14 @@ def enhancer_node(state: MessagesState) -> Command[Literal["supervisor"]]:
         {"role": "system", "content": system_prompt},
     ] + state["messages"]
     enhanced_query = llm.invoke(messages)
-    print(f"--- Workflow Transition: Prompt Enhancer → Supervisor ---")
+    print(f"--- Workflow Transition: Prompt Enhancer  Supervisor ---")
     return Command(
-        update={"messages": [HumanMessage(content=enhanced_query.content, name="enhancer")]},
+        update={
+            "messages": [HumanMessage(content=enhanced_query.content, name="enhancer")]
+        },
         goto="supervisor",
     )
+
 
 def research_node(state: MessagesState) -> Command[Literal["validator"]]:
     research_agent = create_react_agent(
@@ -85,11 +93,16 @@ def research_node(state: MessagesState) -> Command[Literal["validator"]]:
         "Provide thorough, factual responses without speculation where information is unavailable.",
     )
     result = research_agent.invoke(state)
-    print(f"--- Workflow Transition: Researcher → Validator ---")
+    print(f"--- Workflow Transition: Researcher  Validator ---")
     return Command(
-        update={"messages": [HumanMessage(content=result["messages"][-1].content, name="researcher")]},
+        update={
+            "messages": [
+                HumanMessage(content=result["messages"][-1].content, name="researcher")
+            ]
+        },
         goto="validator",
     )
+
 
 def code_node(state: MessagesState) -> Command[Literal["validator"]]:
     code_agent = create_react_agent(
@@ -101,11 +114,16 @@ def code_node(state: MessagesState) -> Command[Literal["validator"]]:
         ),
     )
     result = code_agent.invoke(state)
-    print(f"--- Workflow Transition: Coder → Validator ---")
+    print(f"--- Workflow Transition: Coder  Validator ---")
     return Command(
-        update={"messages": [HumanMessage(content=result["messages"][-1].content, name="coder")]},
+        update={
+            "messages": [
+                HumanMessage(content=result["messages"][-1].content, name="coder")
+            ]
+        },
         goto="validator",
     )
+
 
 system_prompt = """
     Your task is to ensure reasonable quality. 
@@ -121,11 +139,15 @@ system_prompt = """
     1. 'supervisor' Agent: ONLY for responses that are completely incorrect or off-topic.
     2. Respond with 'FINISH' in all other cases to end the workflow.
 """
+
+
 class Validator(BaseModel):
     next: Literal["supervisor", "FINISH"] = Field(
         description="Specifies the next worker in the pipeline: 'supervisor' to continue or 'FINISH' to terminate."
     )
     reason: str = Field(description="The reason for the decision.")
+
+
 def validator_node(state: MessagesState) -> Command[Literal["supervisor", "__end__"]]:
     user_question = state["messages"][0].content
     agent_answer = state["messages"][-1].content
@@ -141,11 +163,13 @@ def validator_node(state: MessagesState) -> Command[Literal["supervisor", "__end
         goto = END
         print(" --- Transitioning to END ---")
     else:
-        print(f"--- Workflow Transition: Validator → Supervisor ---")
+        print(f"--- Workflow Transition: Validator  Supervisor ---")
     return Command(
         update={"messages": [HumanMessage(content=reason, name="validator")]},
         goto=goto,
     )
+
+
 graph = StateGraph(MessagesState)
 graph.add_node("supervisor", supervisor_node)
 graph.add_node("enhancer", enhancer_node)
@@ -155,6 +179,7 @@ graph.add_node("validator", validator_node)
 graph.add_edge(START, "supervisor")
 app = graph.compile()
 import pprint
+
 inputs = {
     "messages": [
         ("user", "Give me the 20th fibonacci number"),
