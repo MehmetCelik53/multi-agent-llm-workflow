@@ -5,7 +5,7 @@ This repository contains a modular multi-agent workflow using LangChain and Lang
 ## Dosyalar
 - `Multi_agents.py`: Ana kod dosyası.
 - `requirements.txt`: Minimum gereksinimler.
-- `.env`: Ortam değişkenleri için (örnek, boş).
+- `.env`: Ortam değişkenleri için 
 - `.gitignore`: Python ve Jupyter için önerilen dosya ve klasörler.
 
 ## Kullanılan Kütüphaneler
