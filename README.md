@@ -1,29 +1,41 @@
-# Multi-Agent LLM Workflow
+# Multi-Agent LLM Reflexion Workflow
 
-This repository contains a modular multi-agent workflow using LangChain and LangGraph. The main script is `Multi_agents.py`.
+This repository demonstrates a multi-agent workflow using Large Language Models (LLMs) and reflexion techniques. The main notebook is `reflexion_graph.ipynb`, which showcases:
 
-## Dosyalar
-- `Multi_agents.py`: Ana kod dosyası.
-- `requirements.txt`: Minimum gereksinimler.
-- `.env`: Ortam değişkenleri için 
-- `.gitignore`: Python ve Jupyter için önerilen dosya ve klasörler.
+## Features
+- **Reflexion Agent Graph**: Implements a research agent that answers, critiques, and revises its own outputs using LangChain, LangGraph, and Tavily search.
+- **Search Integration**: Uses Tavily API for web search to improve answers.
+- **Self-Reflection**: The agent critiques its own answers and iteratively improves them.
+- **Graph-Based Workflow**: Utilizes LangGraph to structure agent steps (draft, execute tools, revise).
+- **Extensible Python Modules**: Includes supporting scripts for chains, tool execution, and schema definitions.
 
-## Kullanılan Kütüphaneler
-- pydantic
-- langchain-core
-- langgraph
-- python-dotenv
-- langchain-experimental
-- langchain-google-genai
-- langchain-tavily
+## Main Files
+- `reflexion_graph.ipynb`: Main notebook with agent workflow and reflexion logic.
+- `reflexion_graph.py`: Python script version of the agent workflow.
+- `Multi_agents.py`: Example multi-agent implementation.
+- `chains.py`, `execute_tools.py`, `schema.py`: Supporting modules for agent logic.
+- `requirements.txt`: Python dependencies.
 
-## Kullanım
-1. Gerekli paketleri yükleyin:
+## Quick Start
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MehmetCelik53/multi-agent-llm-workflow.git
+   cd multi-agent-llm-workflow
+   ```
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-2. Ortam değişkenlerini `.env` dosyasına ekleyin.
-3. `Multi_agents.py` dosyasını çalıştırın.
+3. Add your API keys for Google Gemini and Tavily when prompted in the notebook.
+4. Run `reflexion_graph.ipynb` in Jupyter or VS Code.
 
-## Açıklama
-Bu repo, çoklu uzman ajanlar ile bir iş akışı yönetimi örneği sunar. Kod ve dosya yapısı ileride yeni sayfalar ve modüller eklenerek genişletilebilir.
+## Requirements
+- Python 3.10+
+- See `requirements.txt` for required packages
+
+## Usage
+- Open `reflexion_graph.ipynb` and follow the cells to run the agent workflow.
+- You can adapt the agent logic for your own research or multi-agent applications.
+
+## License
+MIT
