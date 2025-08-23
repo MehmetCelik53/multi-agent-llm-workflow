@@ -1,20 +1,15 @@
-# Multi-Agent LLM Reflexion Workflow
+# Reflexion Agent Workflow
 
-This repository demonstrates a multi-agent workflow using Large Language Models (LLMs) and reflexion techniques. The main notebook is `reflexion_graph.ipynb`, which showcases:
+This repository contains a minimal, clean implementation of a reflexion-based agent workflow using Large Language Models (LLMs) and LangGraph. All unnecessary files have been removed; only the main notebook and essential files remain.
+
+## Main Notebook
+- **reflexion_graph.ipynb**: The core notebook demonstrating a reflexion agent that answers questions, critiques its own answers, and revises them using search results and self-reflection.
 
 ## Features
-- **Reflexion Agent Graph**: Implements a research agent that answers, critiques, and revises its own outputs using LangChain, LangGraph, and Tavily search.
-- **Search Integration**: Uses Tavily API for web search to improve answers.
-- **Self-Reflection**: The agent critiques its own answers and iteratively improves them.
-- **Graph-Based Workflow**: Utilizes LangGraph to structure agent steps (draft, execute tools, revise).
-- **Extensible Python Modules**: Includes supporting scripts for chains, tool execution, and schema definitions.
-
-## Main Files
-- `reflexion_graph.ipynb`: Main notebook with agent workflow and reflexion logic.
-- `reflexion_graph.py`: Python script version of the agent workflow.
-- `Multi_agents.py`: Example multi-agent implementation.
-- `chains.py`, `execute_tools.py`, `schema.py`: Supporting modules for agent logic.
-- `requirements.txt`: Python dependencies.
+- **LLM Integration**: Uses Google Gemini and Anthropic models via LangChain.
+- **Search Tool**: Integrates Tavily search for real-time information retrieval.
+- **Self-Reflection**: Agent critiques and improves its own answers in multiple steps.
+- **Graph Workflow**: Utilizes LangGraph to structure agent steps (draft, execute tools, revise).
 
 ## Quick Start
 1. Clone the repository:
@@ -26,8 +21,7 @@ This repository demonstrates a multi-agent workflow using Large Language Models 
    ```bash
    pip install -r requirements.txt
    ```
-3. Add your API keys for Google Gemini and Tavily when prompted in the notebook.
-4. Run `reflexion_graph.ipynb` in Jupyter or VS Code.
+3. Run `reflexion_graph.ipynb` in Jupyter or VS Code. Enter your API keys when prompted.
 
 ## Requirements
 - Python 3.10+
@@ -35,7 +29,7 @@ This repository demonstrates a multi-agent workflow using Large Language Models 
 
 ## Usage
 - Open `reflexion_graph.ipynb` and follow the cells to run the agent workflow.
-- You can adapt the agent logic for your own research or multi-agent applications.
+- The agent will answer, reflect, and revise using search results.
 
 ## License
 MIT
